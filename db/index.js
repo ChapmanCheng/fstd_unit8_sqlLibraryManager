@@ -13,6 +13,6 @@ const db = {
   models: {}
 };
 
-db.models.Books = require("./model/book");
+db.models.Books = require("./model/books")(sequelize);
 
 module.exports = db;
