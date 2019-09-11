@@ -1,27 +1,27 @@
 {
-  "name": "08_sqlLibraryManager",
-  "version": "1.0.0",
-  "description": "FSTD SQL Library Manager project for Treehouse",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": ""
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/chapweb/fstd_unit8_sqlLibraryManager.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/chapweb/fstd_unit8_sqlLibraryManager/issues"
-  },
-  "homepage": "https://github.com/chapweb/fstd_unit8_sqlLibraryManager#readme",
-  "dependencies": {
-    "express": "^4.17.1",
-    "pug": "^2.0.4",
-    "sequelize": "^5.18.4",
-    "sqlite3": "^4.1.0"
-  }
+	"name": "08_sqlLibraryManager",
+	"version": "1.0.0",
+	"description": "FSTD SQL Library Manager project for Treehouse",
+	"main": "app.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"start": ""
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/chapweb/fstd_unit8_sqlLibraryManager.git"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/chapweb/fstd_unit8_sqlLibraryManager/issues"
+	},
+	"homepage": "https://github.com/chapweb/fstd_unit8_sqlLibraryManager#readme",
+	"dependencies": {
+		"express": "^4.17.1",
+		"pug": "^2.0.4",
+		"sequelize": "^5.18.4",
+		"sqlite3": "^4.1.0"
+	}
 }
