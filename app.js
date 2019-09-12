@@ -24,8 +24,7 @@ const port = 3000;
 app.set("views", "views");
 app.set("view engine", "pug");
 
-// app.get("/", (req, res) => ); //need to redirect to "/books"
-// app.get("/books", (req, res) =>)
+app.use("/public", express.static("public"));
 
 // app.get("/books/new", (req, res) =>)
 // app.post("/books/new", (req, res) =>)
