@@ -4,6 +4,7 @@
 
 const express = require("express");
 const db = require("./db");
+const books = require("./test_db");
 
 // ================================
 // *          SEQUELIZE
@@ -27,7 +28,7 @@ app.set("view engine", "pug");
 app.use("/public", express.static("public"));
 
 app.get("/", (req, res) => res.redirect("/books")); // need to redirect to "/books"
-app.get("/books", (req, res) => res.render("all_books"));
+app.get("/books", (req, res) => res.render("all_books", { books }));
 
 app
   .route("/books/new")
@@ -38,6 +39,7 @@ app
   .route("/books/:id")
   .get((req, res) => {
     const { id } = req.params;
+    res.render("book_detail", { id });
   })
   .post((req, res) => {
     const { id } = req.params;
