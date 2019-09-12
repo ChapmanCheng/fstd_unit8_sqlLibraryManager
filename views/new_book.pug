@@ -2,7 +2,7 @@ extends layout.pug
 
 block content
   h1 New Book
-  form
+  form(method='post', action='/books/new')
     p
       label(for='title') Title
       input#title(name='title', type='text')
@@ -16,6 +16,6 @@ block content
       label(for='year') Year
       input#year(name='year', type='text')
     p
-      input(type='submit', value='Create New Book')
+      input(type='submit', value='submit')
     p
       a.button(href='/') Cancel

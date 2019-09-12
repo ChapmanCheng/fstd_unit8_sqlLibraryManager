@@ -44,7 +44,10 @@ app.get("/books", async (req, res) => {
 app
   .route("/books/new")
   .get((req, res) => res.render("new_book"))
-  .post((req, res) => {});
+  .post((req, res) => {
+    // const { title, author, genre, year } = req.body;
+    console.log(req.body);
+  });
 
 app
   .route("/books/:id")
@@ -53,9 +56,7 @@ app
     const book = books[id];
     res.render("book_detail", { book });
   })
-  .post((req, res) => {
-    const { id, title, author, genre } = req.params;
-  });
+  .post((req, res) => {});
 
 app.delete("/books/:id/delete", (req, res) => {
   const { id } = req.params;
