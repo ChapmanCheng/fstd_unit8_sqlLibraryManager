@@ -4,7 +4,6 @@
 
 const express = require("express");
 const db = require("./db");
-const books = require("./test_db");
 
 // ================================
 // *          SEQUELIZE
@@ -13,7 +12,7 @@ const books = require("./test_db");
 const { Books } = db.models;
 Books.sync()
   .then()
-  .catch(err => console.error(`There is an error: ${err}`));
+  .catch(err => console.error(`There is an error: ${err}`)); // ? should I seperate this into its own module
 
 // ================================
 // *          ROUTER
@@ -27,8 +26,20 @@ app.set("view engine", "pug");
 
 app.use("/public", express.static("public"));
 
+// ACCESS DATABASE
+
+let books;
+app.use(async (req, res, next) => {
+  books = await Books.findAll();
+  next();
+});
+
+// ROUTES
+
 app.get("/", (req, res) => res.redirect("/books")); // need to redirect to "/books"
-app.get("/books", (req, res) => res.render("all_books", { books }));
+app.get("/books", async (req, res) => {
+  res.render("all_books", { books });
+});
 
 app
   .route("/books/new")
@@ -39,10 +50,11 @@ app
   .route("/books/:id")
   .get((req, res) => {
     const { id } = req.params;
-    res.render("book_detail", { id });
+    const book = books[id];
+    res.render("book_detail", { book });
   })
   .post((req, res) => {
-    const { id } = req.params;
+    const { id, title, author, genre } = req.params;
   });
 
 app.delete("/books/:id/delete", (req, res) => {
