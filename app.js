@@ -26,7 +26,8 @@ app.set("view engine", "pug");
 
 app.use("/public", express.static("public"));
 
-// app.get("/books/new", (req, res) =>)
+app.get("/", (req, res) => res.redirect("/books")); // need to redirect to "/books"
+app.get("/books", (req, res) => res.render("all_books"));
 // app.post("/books/new", (req, res) =>)
 
 // app.get("/books/:id", (req, res) =>)
