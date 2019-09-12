@@ -1,22 +1,22 @@
-/**
- * * IMPORTS
- */
+// ================================
+// *          IMPORTS
+// ================================
 
 const express = require("express");
 const db = require("./db");
 
-const { Books } = db.models;
+// ================================
+// *          SEQUELIZE
+// ================================
 
-/**
- * * SEQUELIZE
- */
+const { Books } = db.models;
 Books.sync()
   .then()
   .catch(err => console.error(`There is an error: ${err}`));
 
-/**
- * * ROUTER
- */
+// ================================
+// *          ROUTER
+// ================================
 
 const app = express();
 const port = 3000;
