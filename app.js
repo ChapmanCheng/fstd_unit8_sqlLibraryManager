@@ -83,15 +83,18 @@ app.get("/books/:id/delete", (req, res) => {
   Books.destroy({ where: { id } }).then(() => res.redirect("/"));
 });
 
+app.use((req, res, next) => {
+  const err = new Error("Look elsewhere, there's nothing here...");
+  err.status = 404;
+  next(err);
+});
+
 // ================================
 // *          ERROR HANDLER
 // ================================
 
 app.use((err, req, res, next) => {
-  // ? might need to expand the error object
-  console.error(err);
-  res.status(500).send("it's broken! Fix it");
-  // res.render("error", { err });
+  res.status(err.status).render("page_not_found", { err });
   next();
 });
 
