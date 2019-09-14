@@ -32,7 +32,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // ROUTES
 
-app.get("/", (req, res) => res.redirect("/books")); // need to redirect to "/books"
+app.get("/", (req, res) => res.redirect("/books"));
 app.get("/books", async (req, res) => {
   const books = await Books.findAll();
   res.render("all_books", { books });
@@ -63,8 +63,11 @@ app
   })
   .post((req, res) => {});
 
-app.delete("/books/:id/delete", (req, res) => {
+app.get("/books/:id/delete", (req, res) => {
   const { id } = req.params;
+  Books.destroy({ where: { id } })
+    // redirect to front page
+    .then(() => res.redirect("/"));
 });
 
 // ================================
