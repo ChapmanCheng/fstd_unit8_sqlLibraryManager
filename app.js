@@ -46,7 +46,7 @@ app.get("/books", async (req, res) => {
   const { rows, count } = await Books.findAndCountAll({
     limit,
     offset: page * limit
-});
+  });
   const pages = Math.ceil(count / limit);
   res.render("all_books", { books: rows, pages });
 });
@@ -54,7 +54,7 @@ app.get("/books", async (req, res) => {
 app
   .route("/books/new")
   .get((req, res) => res.render("new_book", { messages: null }))
-  .post(async (req, res) => {
+  .post((req, res) => {
     const { title, author, genre, year } = req.body;
     Books.create({ title, author, genre, year })
       .then(() => console.log(`new book "${title}" logged to database`))
@@ -63,8 +63,6 @@ app
         if (err.name === "SequelizeValidationError") {
           const errorMessages = err.errors.map(e => e.message);
           res.render("new_book", { messages: errorMessages });
-        } else {
-          console.log(err);
         }
       });
   });
@@ -83,9 +81,8 @@ app
       .catch(err => {
         if (err.name === "SequelizeValidationError") {
           const messages = err.errors.map(e => e.message);
-          res.render("book_detail", { messages });
-        } else {
-          console.log(err);
+          const book = Books.findByPk(id);
+          res.render("book_detail", { book, messages });
         }
       });
   });
