@@ -92,15 +92,16 @@ app
     const { id } = req.params;
     Books.findByPk(id).then(book => res.render("book_detail", { book }));
   })
-  .post(async (req, res) => {
+  .post((req, res) => {
     const { id } = req.params;
+    const { title, author, genre, year } = req.body;
     Books.findByPk(id)
-      .then(book => book.update(req.body))
-      .then(res.redirect("/"))
-      .catch(err => {
+      .then(book => book.update({ title, author, genre, year }))
+      .then(() => res.redirect("/"))
+      .catch(async err => {
         if (err.name === "SequelizeValidationError") {
           const messages = err.errors.map(e => e.message);
-          const book = Books.findByPk(id);
+          const book = await Books.findByPk(id);
           res.render("book_detail", { book, messages });
         }
       });
