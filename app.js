@@ -106,7 +106,19 @@ app.use((req, res, next) => {
 // ================================
 
 app.use((err, req, res, next) => {
-  res.status(err.status).render("page_not_found", { err });
+  res.status(err.status || 500);
+  const { statusCode } = res;
+
+  switch (statusCode) {
+    case 404:
+      res.render("page_not_found", { statusCode });
+      break;
+    case 500:
+      res.render("error");
+      break;
+    default:
+      res.send(err);
+  }
   next();
 });
 
