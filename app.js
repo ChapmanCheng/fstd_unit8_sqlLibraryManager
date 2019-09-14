@@ -30,18 +30,11 @@ app.use("/public", express.static("public"));
 // body parser
 app.use(bodyParser.urlencoded({ extended: false }));
 
-// ACCESS DATABASE
-
-let books;
-app.use(async (req, res, next) => {
-  books = await Books.findAll();
-  next();
-});
-
 // ROUTES
 
 app.get("/", (req, res) => res.redirect("/books")); // need to redirect to "/books"
 app.get("/books", async (req, res) => {
+  const books = await Books.findAll();
   res.render("all_books", { books });
 });
 
@@ -50,8 +43,8 @@ app
   .get((req, res) => res.render("new_book", { messages: null }))
   .post(async (req, res) => {
     try {
-    const { title, author, genre, year } = req.body;
-      await Books.create(title, author, genre, year);
+      const { title, author, genre, year } = req.body;
+      Books.create(title, author, genre, year);
 
       console.log(`new book "${title}" logged to database`);
       res.redirect("/");
@@ -59,7 +52,7 @@ app
       if (err.name === "SequelizeValidationError") {
         const errorMessages = err.errors.map(e => e.message);
         res.render("new_book", { messages: errorMessages });
-    }
+      }
     }
     // }
   });
