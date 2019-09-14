@@ -42,16 +42,16 @@ app
   .route("/books/new")
   .get((req, res) => res.render("new_book", { messages: null }))
   .post(async (req, res) => {
-      const { title, author, genre, year } = req.body;
+    const { title, author, genre, year } = req.body;
     Books.create({ title, author, genre, year })
       .then(() => console.log(`new book "${title}" logged to database`))
       .then(() => res.redirect("/"))
       .catch(err => {
-      if (err.name === "SequelizeValidationError") {
-        const errorMessages = err.errors.map(e => e.message);
-        res.render("new_book", { messages: errorMessages });
-      }
-  });
+        if (err.name === "SequelizeValidationError") {
+          const errorMessages = err.errors.map(e => e.message);
+          res.render("new_book", { messages: errorMessages });
+        }
+      });
   });
 
 app
@@ -61,7 +61,12 @@ app
     const book = await Books.findByPk(id);
     res.render("book_detail", { book });
   })
-  .post((req, res) => {});
+  .post(async (req, res) => {
+    const { id } = req.params;
+    const book = await Books.findByPk(id);
+    await book.update(req.body);
+    res.redirect("/");
+  });
 
 app.get("/books/:id/delete", (req, res) => {
   const { id } = req.params;
