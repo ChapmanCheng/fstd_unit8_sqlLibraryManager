@@ -3,6 +3,7 @@
 // ================================
 
 const express = require("express");
+const bodyParser = require("body-parser");
 const db = require("./db");
 
 // ================================
@@ -26,6 +27,9 @@ app.set("view engine", "pug");
 
 app.use("/public", express.static("public"));
 
+// body parser
+app.use(bodyParser.urlencoded({ extended: false }));
+
 // ACCESS DATABASE
 
 let books;
@@ -44,9 +48,10 @@ app.get("/books", async (req, res) => {
 app
   .route("/books/new")
   .get((req, res) => res.render("new_book"))
-  .post((req, res) => {
-    // const { title, author, genre, year } = req.body;
-    console.log(req.body);
+  .post(async (req, res) => {
+    await Books.create(req.body);
+    console.log(`new book "${req.body.title}" logged to database`);
+    res.redirect("/");
   });
 
 app
