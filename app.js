@@ -47,11 +47,18 @@ app.get("/books", async (req, res) => {
 
 app
   .route("/books/new")
-  .get((req, res) => res.render("new_book"))
+  .get((req, res) => res.render("new_book", { missingField: null }))
   .post(async (req, res) => {
-    await Books.create(req.body);
-    console.log(`new book "${req.body.title}" logged to database`);
-    res.redirect("/");
+    const { title, author, genre, year } = req.body;
+    if (title.trim() === "") {
+      res.render("new_book", { missingField: "title" });
+    } else if (author.trim() === "") {
+      res.render("new_book", { missingField: "author" });
+    } else {
+      await Books.create(title, author, genre, year);
+      console.log(`new book "${title}" logged to database`);
+      res.redirect("/");
+    }
   });
 
 app
