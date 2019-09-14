@@ -8,14 +8,7 @@ const logger = require("morgan");
 // const sequelizeValidationError = require("./functions/sequelizeValidationError");
 const db = require("./db");
 
-// ================================
-// *          SEQUELIZE
-// ================================
-
 const { Books } = db.models;
-Books.sync()
-  .then(() => console.log("database synced"))
-  .catch(err => console.error(`There is an error: ${err}`)); // ? should I seperate this into its own module
 
 // ================================
 // *          ROUTER
@@ -32,6 +25,17 @@ app.use("/public", express.static("public"));
 // middleware
 app.use(logger("dev"));
 app.use(bodyParser.urlencoded({ extended: false }));
+
+// ! Deprecated - only sync with new table
+// // sync with database
+// app.use((req, res, next) => {
+//   Books.sync()
+//     .then(() => console.log("database synced"))
+//     .catch(err => {
+//       next(err);
+//     });
+//   next();
+// });
 
 // ROUTES
 
