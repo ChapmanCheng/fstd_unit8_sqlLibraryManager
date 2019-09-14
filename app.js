@@ -4,6 +4,7 @@
 
 const express = require("express");
 const bodyParser = require("body-parser");
+const logger = require("morgan");
 // const sequelizeValidationError = require("./functions/sequelizeValidationError");
 const db = require("./db");
 
@@ -28,7 +29,8 @@ app.set("view engine", "pug");
 
 app.use("/public", express.static("public"));
 
-// body parser
+// middleware
+app.use(logger("dev"));
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // ROUTES
