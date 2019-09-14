@@ -12,7 +12,7 @@ const db = require("./db");
 
 const { Books } = db.models;
 Books.sync()
-  .then()
+  .then(() => console.log("database synced"))
   .catch(err => console.error(`There is an error: ${err}`)); // ? should I seperate this into its own module
 
 // ================================
@@ -42,26 +42,23 @@ app
   .route("/books/new")
   .get((req, res) => res.render("new_book", { messages: null }))
   .post(async (req, res) => {
-    try {
       const { title, author, genre, year } = req.body;
-      Books.create(title, author, genre, year);
-
-      console.log(`new book "${title}" logged to database`);
-      res.redirect("/");
-    } catch (err) {
+    Books.create({ title, author, genre, year })
+      .then(() => console.log(`new book "${title}" logged to database`))
+      .then(() => res.redirect("/"))
+      .catch(err => {
       if (err.name === "SequelizeValidationError") {
         const errorMessages = err.errors.map(e => e.message);
         res.render("new_book", { messages: errorMessages });
       }
-    }
-    // }
+  });
   });
 
 app
   .route("/books/:id")
-  .get((req, res) => {
+  .get(async (req, res) => {
     const { id } = req.params;
-    const book = books[id];
+    const book = await Books.findByPk(id);
     res.render("book_detail", { book });
   })
   .post((req, res) => {});
