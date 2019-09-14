@@ -4,6 +4,7 @@
 
 const express = require("express");
 const bodyParser = require("body-parser");
+const sequelizeValidationError = require("./functions/sequelizeValidationError");
 const db = require("./db");
 
 // ================================
@@ -47,32 +48,31 @@ app
       .then(() => console.log(`new book "${title}" logged to database`))
       .then(() => res.redirect("/"))
       .catch(err => {
-        if (err.name === "SequelizeValidationError") {
-          const errorMessages = err.errors.map(e => e.message);
-          res.render("new_book", { messages: errorMessages });
-        }
+        const messages = sequelizeValidationError(err);
+        res.render("new_book", { messages });
       });
   });
 
 app
   .route("/books/:id")
-  .get(async (req, res) => {
+  .get((req, res) => {
     const { id } = req.params;
-    const book = await Books.findByPk(id);
-    res.render("book_detail", { book });
+    Books.findByPk(id).then(book => res.render("book_detail", { book }));
   })
   .post(async (req, res) => {
     const { id } = req.params;
-    const book = await Books.findByPk(id);
-    await book.update(req.body);
-    res.redirect("/");
+    Books.findByPk(id)
+      .then(book => book.update(req.body))
+      .then(res.redirect("/"))
+      .catch(err => {
+        const messages = sequelizeValidationError(err);
+        res.render("book_detail", { messages });
+      });
   });
 
 app.get("/books/:id/delete", (req, res) => {
   const { id } = req.params;
-  Books.destroy({ where: { id } })
-    // redirect to front page
-    .then(() => res.redirect("/"));
+  Books.destroy({ where: { id } }).then(() => res.redirect("/"));
 });
 
 // ================================
