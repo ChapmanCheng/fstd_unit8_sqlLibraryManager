@@ -4,7 +4,7 @@
 
 const express = require("express");
 const bodyParser = require("body-parser");
-const sequelizeValidationError = require("./functions/sequelizeValidationError");
+// const sequelizeValidationError = require("./functions/sequelizeValidationError");
 const db = require("./db");
 
 // ================================
@@ -48,8 +48,12 @@ app
       .then(() => console.log(`new book "${title}" logged to database`))
       .then(() => res.redirect("/"))
       .catch(err => {
-        const messages = sequelizeValidationError(err);
-        res.render("new_book", { messages });
+        if (err.name === "SequelizeValidationError") {
+          const errorMessages = err.errors.map(e => e.message);
+          res.render("new_book", { messages: errorMessages });
+        } else {
+          console.log(err);
+        }
       });
   });
 
@@ -65,8 +69,12 @@ app
       .then(book => book.update(req.body))
       .then(res.redirect("/"))
       .catch(err => {
-        const messages = sequelizeValidationError(err);
-        res.render("book_detail", { messages });
+        if (err.name === "SequelizeValidationError") {
+          const messages = err.errors.map(e => e.message);
+          res.render("book_detail", { messages });
+        } else {
+          console.log(err);
+        }
       });
   });
 
