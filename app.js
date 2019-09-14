@@ -41,8 +41,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get("/", (req, res) => res.redirect("/books"));
 app.get("/books", async (req, res) => {
-  const books = await Books.findAll();
-  res.render("all_books", { books });
+  const page = req.query.p - 1 || 0;
+  const limit = 10;
+  const { rows, count } = await Books.findAndCountAll({
+    limit,
+    offset: page * limit
+});
+  const pages = Math.ceil(count / limit);
+  res.render("all_books", { books: rows, pages });
 });
 
 app
