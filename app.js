@@ -56,7 +56,7 @@ app.get("/books", async (req, res) => {
       },
       order: [["id", "DESC"]]
     });
-    res.render("all_books", { books });
+    return res.render("all_books", { books });
   }
 
   // for pagination
