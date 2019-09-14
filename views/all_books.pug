@@ -6,6 +6,9 @@ block content
         a.button(
             href="/books/new"
         ) Create New Book
+    form(method="get" action="/books")
+        input#search(name="q", type="text")
+        input(type="submit" value="search")
     table
         thead
             tr

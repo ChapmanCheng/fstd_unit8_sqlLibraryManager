@@ -8,6 +8,7 @@ const logger = require("morgan");
 // const sequelizeValidationError = require("./functions/sequelizeValidationError");
 const db = require("./db");
 
+const { Op } = db.Sequelize;
 const { Books } = db.models;
 
 // ================================
@@ -41,6 +42,24 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get("/", (req, res) => res.redirect("/books"));
 app.get("/books", async (req, res) => {
+  // if user search for book and return a "q" query
+  const { q } = req.query;
+  if (q) {
+    const books = await Books.findAll({
+      where: {
+        [Op.or]: [
+          { title: { [Op.like]: `%${q}%` } },
+          { author: { [Op.like]: `%${q}%` } },
+          { genre: { [Op.like]: `%${q}%` } },
+          { year: { [Op.like]: `%${q}%` } }
+        ]
+      },
+      order: [["id", "DESC"]]
+    });
+    res.render("all_books", { books });
+  }
+
+  // for pagination
   const page = req.query.p - 1 || 0;
   const limit = 10;
   const { rows, count } = await Books.findAndCountAll({
