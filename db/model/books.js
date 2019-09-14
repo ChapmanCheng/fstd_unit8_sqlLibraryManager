@@ -29,7 +29,7 @@ module.exports = sequelize => {
       genre: Sequelize.STRING,
       year: Sequelize.INTEGER
     },
-    { sequelize } // options
+    { sequelize }
   );
   return Books;
 };
