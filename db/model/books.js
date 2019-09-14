@@ -7,18 +7,27 @@ module.exports = sequelize => {
     {
       title: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
+        validate: {
+          notNull: {
+            msg:
+              "You are missing the title, I can't create this entry into the database like that?!"
+          },
+          notEmpty: { msg: "Why are you giving me an empty Title?" }
+        }
       },
       author: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
+        validate: {
+          notNull: {
+            msg: "If there's a book, there must be an author, type it in"
+          },
+          notEmpty: { msg: "Why are you giving me an empty author?" }
+        }
       },
-      genre: {
-        type: Sequelize.STRING
-      },
-      year: {
-        type: Sequelize.INTEGER
-      }
+      genre: Sequelize.STRING,
+      year: Sequelize.INTEGER
     },
     { sequelize } // options
   );
