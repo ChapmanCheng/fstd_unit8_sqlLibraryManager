@@ -74,9 +74,7 @@ app
   .route("/books/new")
   .get((req, res) => res.render("new_book", { messages: null }))
   .post((req, res) => {
-    const { title, author, genre, year } = req.body;
-    Books.create({ title, author, genre, year })
-      .then(() => console.log(`new book "${title}" logged to database`))
+    Books.create(req.body)
       .then(() => res.redirect("/"))
       .catch(err => {
         if (err.name === "SequelizeValidationError") {
@@ -94,9 +92,8 @@ app
   })
   .post((req, res) => {
     const { id } = req.params;
-    const { title, author, genre, year } = req.body;
     Books.findByPk(id)
-      .then(book => book.update({ title, author, genre, year }))
+      .then(book => book.update(req.body))
       .then(() => res.redirect("/"))
       .catch(async err => {
         if (err.name === "SequelizeValidationError") {
