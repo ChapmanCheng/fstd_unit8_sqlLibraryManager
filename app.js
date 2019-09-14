@@ -80,7 +80,7 @@ app
       });
   });
 
-app.get("/books/:id/delete", (req, res) => {
+app.post("/books/:id/delete", (req, res) => {
   const { id } = req.params;
   Books.destroy({ where: { id } }).then(() => res.redirect("/"));
 });
